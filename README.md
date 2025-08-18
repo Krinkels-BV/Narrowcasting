@@ -1,2 +1,0 @@
-# Narrowcasting
-Narrowcasting fotomuur
