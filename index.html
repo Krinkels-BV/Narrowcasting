@@ -1,32 +1,34 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-  <meta charset="UTF-8">
-  <title>Fotomuur Narrowcasting</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Narrowcasting – Fotocarousel</title>
   <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      background: black;
-    }
-    .pa-gallery-player-widget {
-      width: 100%;
-      height: 100vh; /* vult hele iframe hoogte */
-    }
+    html, body { height:100%; margin:0; background:#000; overflow:hidden; }
+    .wrap { height:100%; width:100%; display:flex; }
+    /* Carousel vult het iframe volledig */
+    .pa-carousel-widget { width:100%; height:100vh; display:block; }
+    /* Optioneel: cursor verbergen op signage */
+    body { cursor: none; }
   </style>
+  <!-- CDN fallback:
+       Download https://cdn.jsdelivr.net/npm/publicalbum@latest/embed-ui.min.js
+       en zet 'm lokaal als /assets/embed-ui.min.js.
+       Vervang dan het script-tag hieronder naar /assets/embed-ui.min.js -->
+  <script src="https://cdn.jsdelivr.net/npm/publicalbum@latest/embed-ui.min.js" async></script>
 </head>
 <body>
-  <!-- PublicAlbum script -->
-  <script src="https://cdn.jsdelivr.net/npm/publicalbum@latest/embed-ui.min.js" async></script>
-
-  <!-- Jouw Google Photos album embed -->
-  <div class="pa-gallery-player-widget"
-       style="display:none;"
-       data-link="https://photos.app.goo.gl/N9M6rTHspirSPZg26"
-       data-title="Narrowcasting"
-       data-description="">
-    <!-- PublicAlbum vult de slides zelf in -->
+  <div class="wrap">
+    <!-- Carousel-only widget: robuust & autoplay -->
+    <div class="pa-carousel-widget"
+         data-link="https://photos.app.goo.gl/N9M6rTHspirSPZg26"
+         data-interval="7000"      <!-- wisselt elke 7s -->
+         data-crop="true"          <!-- vult beeldvullend, snijdt bij indien nodig -->
+         data-autoplay="true"
+         data-background-color="#000">
+      <!-- De widget haalt zelf de foto’s op; geen <object>-lijst nodig -->
+    </div>
   </div>
 </body>
 </html>
