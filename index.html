@@ -1,175 +1,36 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-  <meta charset="UTF-8">
-  <title>Mijn Slideshow</title>
+  <meta charset="UTF-8" />
+  <title>Narrowcasting — 2 Slideshows</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    body {
+    html, body {
+      height: 100%;
       margin: 0;
-      background: #111;
-      color: white;
-      font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      overflow: hidden;
+      background: #000;
     }
-    .slideshow {
-      position: relative;
-      max-width: 90%;
-      max-height: 90%;
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr; /* naast elkaar */
+      grid-auto-rows: 100vh;         /* full height */
     }
-    .slideshow img {
-      display: none;
+    /* Wil je ze onder elkaar? vervang de 2 regels hierboven door:
+       .grid { display: grid; grid-template-rows: 1fr 1fr; height: 100vh; }
+       .grid iframe { height: 50vh; width: 100%; }
+    */
+    iframe {
       width: 100%;
-      height: auto;
-      border-radius: 12px;
-      box-shadow: 0 0 25px rgba(0,0,0,0.8);
-    }
-    .slideshow img.active {
-      display: block;
-    }
-    .controls {
-      position: absolute;
-      bottom: 15px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 15px;
-    }
-    .btn {
-      background: rgba(0,0,0,0.6);
-      border: none;
-      color: white;
-      padding: 8px 16px;
-      cursor: pointer;
-      border-radius: 6px;
-      font-size: 16px;
-    }
-    .btn:hover {
-      background: rgba(255,255,255,0.2);
+      height: 100vh;     /* vul elk paneel volledig */
+      border: 0;
+      background: #000;  /* zwarte achtergrond tijdens laden */
     }
   </style>
 </head>
 <body>
-  <div class="slideshow">
-    <!-- Plak hier al je Google Photos links -->
-    <img src="https://lh3.googleusercontent.com/pw/AP1GczMbbLBK-LkprZXXSVzPcjOWXK2aHkCs_EV8HQYNqbP2nVwMcUGO6RH7Ejov8G36PQXgIKYWy6OhuqMM1t4HWUduU65ZnbwWxsSkFmHxhgJR_tU4FlI=w1920-h1080" class="active">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczMbbLBK-LkprZXXSVzPcjOWXK2aHkCs_EV8HQYNqbP2nVwMcUGO6RH7Ejov8G36PQXgIKYWy6OhuqMM1t4HWUduU65ZnbwWxsSkFmHxhgJR_tU4FlI=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczMke0XrqtqhWpQUcBrdI9mFUkvn3sn2oe5TP5sar7RXB4WPpIjq9mouBCZ6ntlMuuttKsnp-hq-h0vk2BhsXw73o86QZiCgwpKPVno06MuTtOCBBjw=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczMeLIzSzNOPVGIFLZZ1OzpTSgQXtnOS_JgVs9hqGvfqUWLWDi-u8fIvpTQ_l75lr3yWxJANps-fjVPBPXuOYMd_aH_hMVtzTW3_iMrVMmIEzXO9z90=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczOjO8-XHKTeKj70sBB71SVmsMl9n2WLSk8zQ5ssxcXuRH5mg-J2AtXVX1dqhVlqH5fUhHVKb-4llZ5ssqvWB80xcjiaPfsUhi7Jaf5BzH8wMPwhtJ0=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczM6PPqxzK1vuV9noj1djsZXZs9D_XdUjfJAvag0i059sxRB9FRtrljYVFrR5qdx3SIoBpj1-qZxjfWVknarACMRVStVxC1yN-LufToQzW7odxoaJQg=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczPDmor7_bd2y9UUJs63NvWQHFHQHRNdYZr1tgHciC--2RvJSKlDNveklBuz5nG9UiKzjx6P9tSg3I66P1FztZg46woV_86ua9e2-ooVQf_6oob6Q5o=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczMCrAumSdq7z9V-_0ou74RdrPXofl6SRBuhh6SnylWmm024MNhrvJre08q7y5C9XZvk8C__lLNvk-ahNUwBTWha6_pWbZXXwyHiaTr85znIQiuWRAg=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczMb6LU4pKINCjTSA37AcnZ64PhkGpkhVxvlXsMJ8VlOXDVRp7gRGJhIyHWMKZyykv6sjJVl8toaKgc37kZueIhXuxDf5f79wWLMaZmV6WR9vFDpPug=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczNmtsGqiZeR3K_vhU-KlQqhGCohKPcprlH_8wntxB1tg6i5sG2vmfU2q9gwD2Qkz1G7a1V5WNsolOUUxjPh6CUnuH1asDdWIEDsU391m0nkZxqIqPA=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczMsNViyffsoz_3oRz6x10Uxdt5UguWnf70gWtmPeAAJmwV6efdZ_Ma0ABLO6-3oSq-EbiAbiVqPjkJE4eGjOnmMnGIIUevhFOtWkcgbvwi8WALA7aU=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczPCI9OkOwfuU_OnNVH9lWCO8V5d8EZuQPHDlDpsoYW5ifZ_HYR9uwhahTd11lKcGN1XElE_tQ0XauMnYRX7WmyL2SSELxzysZC019VpHdqXGBI8FbE=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczO8PmGpwswQ7OpipraEVVNXTA-RjWo8KP-Oaix9rNWO4YkQ98SiPptrDQSd3lZne6zFXmK1VLk188SOtGSEkO1Nx8dRivfpGL7TzGYUFYeMFsV2xfM=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczPVvQYK7bNdRUFXeR7KKrxXF3UDkc53Eu8zVCW183tR14NknbUMX1n9adORxDOnnviLRh2CsBoLIUmxZylpsB1MC1RNIOtEIigSJfnATjJU_YhE7S8=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczPOzlUlT92dEqQwmbRvS7aKM1DsufmaJyfLcqemHdlkc_35FAVd8LrzB-fH97JMYpzeeGaHG7AvFN_CPTo_h7xmDyfkzcIYQT8wGoFZ2-oymLy7J88=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczP7fzKhNeUvXV4pCIrrO-C4cnSkQLks2EyLyjgKz1h9Nw8Eht-3Q81Uaf9Qgfo2l5D2RdCln8L_rAgibb27vyMoyRd00WlEz4YculAThpSpsoiv-20=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczOshy09IRmrGPGk3PcFVDqqWnVnrhUx_kOk8sifjN297s1YvNE40PcFBE0YZPth1-SzIJ3Nn1KIYX4n27GLlbgJAwtWIwUxCR7L2mlbgmJHuEoWx4M=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczOqUSMWYlPcp3WEuL1b489btu8EkAx3taH7v6Wf4JFAJBLQY5Kj4tB_JRc-NVDvV9fAbI_1Ebagq93_uQTFYpXvvv7hPhUQxI7Of0i3ONRP-DJ501A=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczNQmNxPCVEQmGG0cL1lswl6rrb5hMwhZa3Qb3LXGse0g90-9JS97nl6oxnTwJZPm9LUrAXK4DnFX_VGzRwu4mW8Q-1v5j1wKAivAtp9n-M4fkFX_eY=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczOWEYQLXV9QZ2jZY5QD2tc8WEZRyY4jFQvVZ8Cu40raWmkjpE9MtzIbrufUvJ5G0RHmu4_j3LHZshqWK3HkIr5HWN0tMn3GBhM3pT2dkRJUknllACs=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczMOdhLZVFU7yCLJePPDI3GnXNfKcYdlayEDPkE_TYs6KFosZuYTTc-l0LoapQmtrsz3Q6vHv8uqJtGl7a-u1otI0e2ndnJ2tMNFJJo6h7hlwuT0JnQ=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczPwa8CN8DAyHhIslC4SWNMdRtytFKHCEW_jdWPHSigXrfQw1GgUphgo6WnD2f9MzRkmVEiEukZgHu27z3MSAAjpzI7FrLHrSRZ5O3kJmcRabniLarM=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczPs_qqVlXLQVl2NQ6DaiKJaFJtUrOOQjWbx_raFdXhRy2Km9CiLtXZdMFRhZgws4ziI_k7qmedzB2h6NWBsa68zErO4ob4ullDSQYdEuoz0nco7sfI=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczNtebTlEPUa_KSRXDTEmM7P4z6_piE5RlVKxKvQE5_q56eSfENO3Na1vVJzn2UeFq8rO42PZXtz5ZmI-C40FA3s8TwBCM9o3bDiGyqbFPV13YgF7pg=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczP47-UG-xUUp23TjXbbaRnFHV-OUQ5Df96Y2JhJJ1Tg1ikBw_Ldn4Z6udqBAnHNvrqrPa8b1kMx-i3UjwJTUVeCvOw8O343Mbuc6UWohim-SkkPCxs=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczNabVtl8ZC_5hBkmNZIZImaVCE9NmQ5uhWcPMso5hYIOrQfuHro65qqqGv0ZYeC-lwsPZ6nj28kOBm1My9k7bOVPBIgBONt7keLyuLUda3j0VdZb0Y=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczNkmGWWrjdLNst8b_YNYuhDDhUUKekwl8TWPkGxcptfD_D4RRDHzU9xGOzig7TrNiL1eWB314rpoj_aaVlVywvBrDmtSYYZnDxR2FECZIjreUIgkIw=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczPyBIrmq1lAmLvdvBuA5ayjoHPdvVJ3E4nEZ3uCBkucyzrLuLFQejm3WYhg57jBxPxmG6jEC0FX4jdlj5zv4a6GDxVph8nv3PNR3yEydXSY3dOGOqY=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczMxQDf7KHAzFE3SSd18uFy3u5NjDjB1MzJkO0idqn2HXMrcBco_HlVsuk1DsBYXu4Algwq1hF_92v6GldHGxu1bUxIIu6AYl2AZxpmR0MPDVO0XDRw=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczMf0xr58fu1J0clfDo4YDPE5EqDvC_RtzJOgWka3z0mCkN-wVXBa5KBNvcCEBGopHPKgZBgdFqf1oWTYyOQmDBS1I5g-hBtTGBziGnhDG8RUn5alMI=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczPVydk1TOYvGiQBWSBNhqZKtaDAxzj_xwroGQVIJVMVVTCg6sLwIs-CF4FsmrNGki44jG7RVLLXw4PeExlmvWO_flWdOkKG_EFETSuW9i7PoqrPLQM=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczNO2XpLPFn11K44ga_J6qCHSFzQPBGaWMpDse5YIXpRQkaU5Izf47A_HiSg-7yQ0SnEDi6jgvyZEYIY0lhhLY0z4bJQ7uRrT8IO9OjgwpEKl2Iax_U=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczPTS2GaTwptUvU1zuRTYdIcCQYkT31nAni95KmUSmg3pu1HJ0FgQ6Wjqo-p8lUBCzEnj16kaLus6VeHfYg-pViwmUoSZ05u-YLV5rriPFtozbWKfZQ=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczNso-t0ZR8RQaKiXAdWfLigLz-aH-YPAbX1_SdEmv7WVvIJuAuU7BXH_IK113S7RRp1R91NfNBvYeYoqnqFUS1JdqdgjDaZz16DAmU6Vtl6V9UD03Y=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczNxw52k9LZ4NDDcH3Ig6MUtTxi800R6ytWu5miydW-dn2YAWf9v1DCeBU3zFaTXA_h3gyU3We-Wvebg9nbucJMdZd3UBoK6AT6zWlyhC8kL95jGIoA=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczPilJmgp4ATYy56YwPgNX57LX65m5FXM5GJzmOLkJL3wJbCEd5at69zHr45QlpJoafA5IeK3k5y6YgdCaUG4tdktTtszpvZ7zLUvKZeeEu51qGFWlM=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczMSOPpZo-YncfH13eqr6xtjME5Nn9pfB0QeMwXZZ8MVDjJKZR6qKxkKXHE4ydcuyY6j8wLhPJsXla5w5PoF4nvxgB-RjBEvZ5R2MzkLbdm1dJjm17U=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczPNocXjQ8wpQrVUNzTNnTy5EDLjiLHWz3z-MGe2qm1ZzjfCweKf-RAFiyBgc66vFfVFRmH5CZCXfHp189e_YrsOSyElYMdaQ2ThWrrsF6cM52kP8m8=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczN44jLwXU_zoADPcCEX-50_iGZ_-pW-sJo5Sa-m4_ZfcruAhdYOdZ-Pq4xNepsZpMGA9bceZosEp2-dWg7n1-r0692ZN2yjByvJY0Pjtux8scWFuJ4=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczPfHk6UbaRfSyHCWCMN07jW2Gk_raq4n3dL_7XRQftc2bL53S53HAyokqrP5W06s4IqZJ-wI1WuTvGSIWU_6uiHskNf2W6YV_J6Mj08RodlS4GBUnM=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczMOS4koz1R09ll0yFEbvqK4_YQFAaybe9AZY2_Dx0LtbnmEWIbdIe-UGsxfM4E4a-SNEDCLnc400MtsuntZX7Sle7JBbc2Lfsf82ayUWb2NgWs7qIE=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczOLQ6xuIBShgOJ_3NqTjmlahlEVxqplmEQWNHq79xbf1G1fhZY1SkkautQX0A_g__yPh4ksZQ8WmKDtQyd4dRFty0NZOPLTeKyNX8xC53IRBqfH_Zw=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczMM2PWWNnWMsDSliDhFqF38FiyCsLoDAwzo7Rm9QJDX9aBgT7r9mxVpK8wANdTTOr4YWRnOvf20Qf_pTFqBQ4CT7bewcSkxxbgmw004ncskvR-L2e8=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczPAUmlN3tsVHhoSBHf9dK7RitoIyrApJCk4mzw6Oak-c1DfEeFTRzYzeSIM0Mx4Edw6QypLJulveDdLQE1RWD8PA8ko50pwW5YDBeLZXZ19XyrzBRo=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczNEX0frSLVONAaXDIxIujhKBf5uhDCnh_8PQj_w1p6pysFeGMAB60gKXeJbCZlfbhOvtcHyGx0w1HyzaHFGZAv3rx8fiYARQop5nKCcXiKedmGwqNY=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczMSlQmK5yxMyqCYf9NfEQyYAIFOT8ByUlaSt-HfPGH1U3BWqjs4qagbEAYlefNSWDD64TKlr30iocjgM66fVTaVT-UuLgJkMdGY7GDCsK-EFH9bf90=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczMYny4lr5rehALd3FARXxQRkXtghI6bYsgipMfiZwa-on41z1DAflvNjJ3KIiWLtHjztqGMeUwEb0b5s6uCupBEYNWeCZkgBydQjuVOIvtZVZLJL7U=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczP_n8cGaTuDfyHpLFo2PcnlY69rx0XreoM8Rp1rx7qDyjsR7fj3ScY7QgrEbhpvmogsJlTqiAwS6qRaT-XFVTgAP8E6QluuY10-7Euqq4IruEfCx7g=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczM-rfAgW4KGS8ulobBDdfE3mUFwYX1pDkTtDudgnkaZJB2l5-GQYINFJGHzx5qVITc73_b54hh2DE7dxi4rW5Aro6PLR0dxKjT7e-4FklzUj85-Lic=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczPvjRhP5aRoaDmH8a73LC6I0dajT-03qkzvKqOZuv8t9-21hrixsDPl4XIyi9SMKLRRCmeLJPqp7x4pHYABNwvnTr4Q1olhzWUFBAsYWES2j9nYmoo=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczMMv5mFR9CtR8AOLQVu9jZIq6zurfvxAyeTaZwctyGCr9z324-R-RBOOUvGPHMYCUDpZ0eRG-QGOBDb6PU90imntJf-9D73_FCkjFr0DQDqOUtmjD4=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczO9RYeoV_q0pmvK3BRexCjxOf59TmSmKopAcMyFV45GAJfgCh2qqezEgPI6Nlu6KJgqRwVwRokCrXOtIVLHLC-0OIxUMT0-XBDkqYkXSEldvgo5JHY=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczOdRxbkrRl2ftd4jr4eDwQ20uh2ueM47WQnzPFrBIPgPmktKyV3D8dKMF20gyLSUnJ3KXL0uiX3h7Gx6V-7lwKr7lIndIaVY0MnVgI7Z5Z1KVrQk9I=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczM-Anx5HkqZKUvmoXgi2MZnZblOZO_CxBHnHhBg5dLBLkjvhuH8GlGDahCIE_DN9YwIWJX5h-eL77pXMC4ZM8tnMlOHbgrg30DlDt05tpn59Wlq22s=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczOmDOYwzzqS0k_fDTbzypAwwebjvfJ8ep4pFrE6bqDRmHDMmqwZYQOAbB9PmzJzwYwbtk67y-EkixfJ_c0So13F_5RQ5YWWVWFUB4TCAwPj_ejFnv4=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczNJcHRsBu46JQiZp6LQUBU0aP7piGoATfwoBWAQEitgOReFwRuPjm9zdbSrOOigowLRAPDrw1Q8v_QGz8SXLfSa5OB7eJZKsvE5DUPdFUKBo5eV1BY=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczN74h7H13cF3jgQxLAhMyp6xKVDa6_QmjFNxGoq1vHbstes1kB4U14JVdFpxUhOKtkw1t1bEId4Ujrml07b3KF8hDxAJzSP20ucXVrLaIqHRTYr610=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczMGJz7SOyjAx9MOwcchygL6rMfnezZgVctsLi0_WHU4ad1WXzA4XIy1Noh5bxvuD8y6j9B3Qb-SCvrWvzPxD0-4-z1kBGnp75i5TveC-QkcFPGR2kU=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczO4O9Uyviqf9cubdQtpinko-06t0oC_ysV51rpAncFt5gb_hpLO8t4kOgLBYFzSbiMmnKf-K8YoeHkge2pio_bYE4rNzc8_E9t1PfwDJQICaFkfz4I=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczPR51FZzBaWJhjhuf4S_c8iDUXMdvyQegUmi1GBrPZ0TWA6SAcmfR6QqEN_L_eY91pXWhIzV91TIRlbbDJe4EYjkqUZiD4FWjfJjnWfORsVmlObh3M=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczMon3gOUiiXd-5D7jU6UO-zlsuqG-Joqu5hciqxyzwgNnH15rv142GwiRXnUuce-M665ne7L9xcSsoas8idR1qfdIeWoujN9gV4oOC3x20twdDs22s=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczOqHQv5wB36swJm4qf1gnu4dEcPYXrXcVvgfRGdNt5MBPMf0eJjI-gM1YcUhhrGtIhwF4RsquVwgQfPtcRxD6ccQLeBYYHdxz2Wo1QhSYCMlL65670=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczOaciYdSeLgJNxz54_Tbh_fvJm16psjWt61ycH1RKZqasFFxU86cnqD46eks6tdzS--lkzgw9n0X2MCoz7cKe-JbXnl8WQzrpEroKu3daMj3f1K--k=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczOklhdOCqwT97VU_z-djqmUQ0scCjLX1fbMmHMGGRqk9z5F3hRA2jiKracoUDx5Hen9GzZazrG1TNTMQ1ph_efO4tzKRXjVVtcRdd_-kMjYvG5LsxQ=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczPhVlne4t8LyWjjrtxIjv9gp87s3umphO3zX9FZmei6fv0BlPHVdWhPzPw_a-t3Qm5ppm3jBc2e3kesXHhtX55xWvFVk21QCGln_jtsPJeNXJM26GA=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczMQfrepmJZJIme-wvVLIWw2k3PnYlxC2Q8lBfoc74tDEWh5dduRaLyDj2YVsTHicujaLBONaWRxESGc6QuO_n1LEy5j2j1WwoHHAR_6-6130oHUTXg=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczNicvZb_r5O6Z7_cARMM_cFJI-zR_AcdWI9GSuivfpKYwLClonDmZqWRvz3xfyKgX4j7uAqtwOEu20qwLJeuQb4YB3vhcFPD0x_i4j__8KV-ZqiulU=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczOHzeV0zD-PCcUmeeOXM1kFv6SAdNPYaqJMT9IfBnXinhvz0CpXsIozoC8BxeAp41em8jgjhlCJVA_mwYA63EklBkau5W0xLZVTCjfmxmG8PPEq82U=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczNlhFFMcsj8RnWhynsL4bHabG4yzSJuUT4B15ma9nF5fs3SogpbyRmVAZi5zy3-gVbhbXQGdAuOn_n5xvBDu2RBZT5x5ZRej6F3Eh5gk_DnMNFEV9k=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczMBVwJ_tVE-qN5jnyrkcdpW1Oabx__jpoDwDinacdeFbmvLr5HBe-SDLPR96HNL21DPvPelMYWmZ8JxfjkOe2nW6foAuyuWDk7TpGQfQBIGBvOatcA=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczONACL4Qhr_H7UT2LORNO4qL9gSktIWJdCY3Qd_ct-L61hg6oNrIWxj3eWOraO5eNo9ucGGlAThdokSoHQLVmlHRFgy0gE0gKuypVtn6lcvYsadWao=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczPXauPoaz29AFXU4BsS5DruedArne_QIi_5eBpgne9YxoszibzZaNbe3YFDEx2LwLu_su03nZnWSu4_Ck6139v8SY2G6HqO-N_JqtjfgIMx-6_QaLQ=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczPx3fz04SASx6OTR16mI9wc-NlzVzQxSkOiFOaq9KueAkVl8qKPKaBkpBl4w145-HQkBNK2Oqt0ayj0aFRxrTYHzhgGzC5mtKboz_pOitDxu94RAtY=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczPKwHN--qfD84Pfr0dgMP-EfsoviM89ZOeEO_Syb21FSptgjPBxgRk_Q0nyxLWKR864Q7_PWg-ul22oJrfHVpggOPkKSEbf9C1YLhn9nDtSDpnVfzU=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczObNABOO2xOKi1MesI_KmZxhM61EUvqQX9QuAkSnoOMSJzrNQ-UrTQUloLnke3OmdGJ6EUSSConxkOfFpELNo6obZblmVReYj7hcC5hWKGyRj6S23Q=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczP0kljqkhcq4rTZEKBaFZmaLlifJmhVeeGmVGyWU9_FyNG3uK61m3zrYlrqTKK5Y6smCbfp9Eq0KkM9EZtq4zvKcZCNni1dwr55w7clNkUIySfrPr8=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczP9pg_bu088JMD51rwHMURmyk8JcbiB-LJSaHw1tGAYMUHoHBYhLPxx4KHI6YGAbNesP2uKy7gM5r77gL675aRo7qnIVgb6h6xUIxks9ysRe1yTuvg=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczPFH2zP2bI4eppGOat7SHcD4MczgV6l_E3lixbn9kSmqxdbZUXFY5f67nshVTHAXsPfqny7AHRP5FVfo51NZ5ApZoOJRM6p5CDm8O6CXQwlCDPNTA4=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczM_mF_Xab-QjMslMvCjUYC5XldtU0xvQ91-oJ0tjcStG9vOGY8CindcoUjL1wTsQkZoJ6YWS97D-ZrodSfZuQknY48DKEuF3OHsXspyED26U_-3dpo=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczNxZLQNcDqjNR-hq8q1NLMK5-Hk5-jn-j0Q7uL_LrxsTHt3Zwl_oed5UniWJ0IgFNhmuEHtehSDyshzC_2jmsTS9F2MOnnpZjO3Zt8rxpt_YOErySM=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczMzXvw3yuiEfD2ey5zT8EgNUJWF92APKUV1RQMdjO38WQK5X5jep2jRD88maMeHblUy15dA89XDPrjvTbjMBGBKoxr-vlfIQs_iN00bNZFM-QuBTUw=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczM-ZfsmMYiKLY972J14EtISRGF5Z1D6KZBDuEJhMA70M8Ti6VWLW7ffUFyCTy6bBIN6QYIWjQmzazIj2ZUWw3wi7tYjBLfmFKmPIx6k3JEvVeM-QWs=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczPN6hkfUj2fEDOIE-f66PXof6B7SH5-zmUfqEtidM9vo6EaolZPRYxFJ0-pUUcJF3sOGsj2YRQtmQLF1r31oATNT1SW3XMV17EbqiGTlm7OngzCXTY=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczNJi2QAPE4yKP1lVMk-UYrKESFEEF1_qMNV9Kf3U00e0jCIr0fTpkIBcshrdLuCWhlxpN1_P9vZiJkAmGUm-Yq7KIJid8jIn3moZoFVZfM7E5KceTY=w1920-h1080">
-  <img src="https://lh3.googleusercontent.com/pw/AP1GczPVqWmZmIEtpIZsOwNsR96Ax9Rb45tRt42umWDI3QbJDt8ok0DhP-U7GSn-2lf8vhJpJg20YlYM8dYMr1FZDgCZVFUCcq_5hUG6RuDAyxTEkhPa2tI=w1920-h1080">
-
-
-    <!-- voeg hier de rest toe... -->
-    
-    <div class="controls">
-      <button class="btn" onclick="prevImage()">⏮ Vorige</button>
-      <button class="btn" onclick="nextImage()">⏭ Volgende</button>
-    </div>
+  <div class="grid">
+    <iframe src="slideshow-landscape.html" title="Landscape slideshow" loading="eager" allowfullscreen></iframe>
+    <iframe src="slideshow-portrait.html"  title="Portrait slideshow"  loading="eager" allowfullscreen></iframe>
   </div>
-
-  <script>
-    let current = 0;
-    const images = document.querySelectorAll('.slideshow img');
-
-    function showImage(index) {
-      images[current].classList.remove('active');
-      current = (index + images.length) % images.length;
-      images[current].classList.add('active');
-    }
-
-    function nextImage() {
-      showImage(current + 1);
-    }
-
-    function prevImage() {
-      showImage(current - 1);
-    }
-
-    // Automatisch doorbladeren elke 5 seconden
-    setInterval(nextImage, 5000);
-  </script>
 </body>
 </html>
