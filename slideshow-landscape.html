@@ -86,8 +86,9 @@
       return img;
     });
 
-    let i = 0;
-    if (slides.length) slides[0].classList.add('active');
+    // --- Start bij een willekeurige foto ---
+    let i = Math.floor(Math.random() * slides.length);
+    slides[i].classList.add('active');
 
     function next() {
       slides[i].classList.remove('active');
