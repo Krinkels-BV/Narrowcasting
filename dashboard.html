@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <title>Narrowcasting Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --gap: 14px;
+      --panel-radius: 12px;
+      --bg: #ffffff;     /* hard wit */
+      --fg: #111111;
+      --muted: #666666;
+    }
+    html, body {
+      height: 100%;
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: system-ui, -apple-system, Arial, sans-serif;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 2fr 1.2fr;
+      grid-template-rows: 1fr 1fr;
+      gap: var(--gap);
+      height: 100vh;
+      padding: var(--gap);
+      box-sizing: border-box;
+      background: var(--bg);
+    }
+    /* Panelen */
+    .panel {
+      background: var(--bg);
+      border-radius: var(--panel-radius);
+      box-shadow: 0 0 0 1px #eee inset;
+      position: relative;
+      overflow: hidden;
+      display: grid;
+      grid-template-rows: auto 1fr;
+    }
+    .panel h2 {
+      margin: 0;
+      padding: 10px 12px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--muted);
+      background: #fff;
+      border-bottom: 1px solid #eee;
+      letter-spacing: .02em;
+    }
+    .panel-body {
+      position: relative;
+      background: #fff;
+    }
+    /* iframes altijd randloos en vullend */
+    .panel-body iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: #fff;
+    }
+
+    /* Lay-out: grote slides links, rest rechts/onder */
+    .panel.portrait   { grid-column: 1 / 2; grid-row: 1 / 3; } /* Hele linker kolom */
+    .panel.landscape  { grid-column: 2 / 3; grid-row: 1 / 2; }
+    .panel.weather    { grid-column: 2 / 3; grid-row: 2 / 3; }
+
+    /* Extra rij met radar + klok + (optioneel) agenda: maak van weather een subgrid */
+    .panel.weather .subgrid {
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: 1.2fr 0.8fr;
+      gap: var(--gap);
+      position: absolute;
+      inset: 0;
+      padding: var(--gap);
+      box-sizing: border-box;
+      background: #fff;
+    }
+    .card {
+      background: #fff;
+      border-radius: var(--panel-radius);
+      box-shadow: 0 0 0 1px #eee inset;
+      overflow: hidden;
+      position: relative;
+    }
+    .card h3 {
+      margin: 0;
+      padding: 8px 10px;
+      font-size: 13px;
+      color: var(--muted);
+      background: #fff;
+      border-bottom: 1px solid #eee;
+    }
+    .card-body {
+      position: relative;
+      height: calc(100% - 38px);
+      background: #fff;
+    }
+    .card-body iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: #fff;
+    }
+    /* Klokje (pure JS, zonder externe bronnen) */
+    .clock {
+      display: grid;
+      place-items: center;
+      height: 100%;
+      background: #fff;
+    }
+    .clock .time {
+      font-size: clamp(36px, 6vw, 72px);
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+    .clock .date {
+      margin-top: 6px;
+      font-size: clamp(14px, 2.5vw, 18px);
+      color: var(--muted);
+      letter-spacing: 0.02em;
+    }
+
+    /* Fallback voor kleinere schermen: stapelen */
+    @media (max-width: 1100px) {
+      .grid {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+      }
+      .panel.portrait, .panel.landscape, .panel.weather {
+        grid-column: 1 / -1;
+        grid-row: auto;
+        min-height: 45vh;
+      }
+      .panel.weather .subgrid {
+        grid-template-rows: 1fr 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="grid">
+    <!-- LINKS: je PORTRET-slideshow -->
+    <section class="panel portrait">
+      <h2>Portrait Slideshow</h2>
+      <div class="panel-body">
+        <!-- Verwijs naar je eerder gemaakte portrait.html (publiek op GitHub Pages) -->
+        <iframe src="./portrait.html" allow="autoplay" loading="lazy"></iframe>
+      </div>
+    </section>
+
+    <!-- RECHTS BOVEN: je LANDSCAPE-slideshow -->
+    <section class="panel landscape">
+      <h2>Landscape Slideshow</h2>
+      <div class="panel-body">
+        <!-- Verwijs naar je eerder gemaakte landscape.html -->
+        <iframe src="./landscape.html" allow="autoplay" loading="lazy"></iframe>
+      </div>
+    </section>
+
+    <!-- RECHTS ONDER: weer/radar + klok (+ optionele agenda) -->
+    <section class="panel weather">
+      <h2>Weer & Info</h2>
+      <div class="panel-body">
+        <div class="subgrid">
+          <!-- Radar / weerkaart (Windy of RainViewer) -->
+          <div class="card">
+            <h3>Windy — Wind & Temperatuur</h3>
+            <div class="card-body">
+              <!-- Windy embed (vrij te gebruiken). Pas lat/lon/zoom aan op jouw regio. -->
+              <iframe
+                src="https://embed.windy.com/embed2.html?lat=52.37&lon=4.90&detailLat=52.37&detailLon=4.90&zoom=8&level=surface&overlay=wind&menu=&message=&marker=&calendar=now&pressure=&type=map&location=coordinates&detail=true&metricWind=default&metricTemp=default"
+                title="Windy"
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+              ></iframe>
+            </div>
+          </div>
+
+          <div class="card" style="display:grid; grid-template-columns: 1fr 1fr; gap: var(--gap);">
+            <!-- Lokale klok (geen externe calls) -->
+            <div class="card" style="margin:0;">
+              <h3>Klok</h3>
+              <div class="card-body">
+                <div class="clock">
+                  <div class="time" id="time">--:--</div>
+                  <div class="date" id="date">-- -- ----</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Neerslagradar (RainViewer, publiek embeddable) -->
+            <div class="card" style="margin:0;">
+              <h3>Neerslagradar</h3>
+              <div class="card-body">
+                <iframe
+                  src="https://www.rainviewer.com/map.html?loc=52.37,4.90,7&oFa=1&oC=1&oU=1&oCS=1&oF=1&oAP=1&c=3&lm=1&layer=radar&sm=1&sn=1"
+                  title="RainViewer Radar"
+                  loading="lazy"
+                ></iframe>
+              </div>
+            </div>
+
+            <!-- Optioneel: publieke Google Calendar (vervang CALENDAR_ID en tijdzone) -->
+            <!--
+            <div class="card" style="grid-column: 1 / -1;">
+              <h3>Agenda</h3>
+              <div class="card-body">
+                <iframe
+                  src="https://calendar.google.com/calendar/embed?src=CALENDAR_ID%40group.calendar.google.com&ctz=Europe%2FAmsterdam&mode=AGENDA&showTz=0&showTabs=0&showCalendars=0&showTitle=0&showPrint=0"
+                  title="Agenda"
+                  loading="lazy"
+                ></iframe>
+              </div>
+            </div>
+            -->
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // ====== Pure JS klok (geen externe bronnen) ======
+    function pad(n){ return n.toString().padStart(2, '0'); }
+    function updateClock() {
+      const now = new Date();
+      const h = pad(now.getHours());
+      const m = pad(now.getMinutes());
+      const d = now.toLocaleDateString('nl-NL', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' });
+      document.getElementById('time').textContent = `${h}:${m}`;
+      document.getElementById('date').textContent = d;
+    }
+    updateClock();
+    setInterval(updateClock, 1000 * 15); // elke 15s bijwerken (minutenresolutie)
+  </script>
+</body>
+</html>
