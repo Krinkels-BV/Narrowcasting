@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <title>Slideshow — Landscape</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      background: #000;
+      color: #fff;
+      font-family: system-ui, -apple-system, Arial, sans-serif;
+    }
+    .stage {
+      position: fixed;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      background: #000;
+    }
+    img.slide {
+      position: absolute;
+      inset: 0;
+      margin: auto;
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;     /* behoudt verhouding, vult zo veel mogelijk */
+      border-radius: 12px;
+      box-shadow: 0 0 25px rgba(0,0,0,0.8);
+      opacity: 0;
+      transition: opacity 800ms ease; /* zachte fade */
+    }
+    img.slide.active { opacity: 1; }
+  </style>
+</head>
+<body>
+  <div class="stage" id="stage"></div>
+
+  <script>
+    // === VUL HIER JE LANDSCAPE-ALBUM LINKS IN ===
+    const SOURCES = [
+      "https://lh3.googleusercontent.com/pw/AP1GczMbbLBK-LkprZXXSVzPcjOWXK2aHkCs_EV8HQYNqbP2nVwMcUGO6RH7Ejov8G36PQXgIKYWy6OhuqMM1t4HWUduU65ZnbwWxsSkFmHxhgJR_tU4FlI=w1920-h1080",
+      "https://lh3.googleusercontent.com/pw/AP1GczMke0XrqtqhWpQUcBrdI9mFUkvn3sn2oe5TP5sar7RXB4WPpIjq9mouBCZ6ntlMuuttKsnp-hq-h0vk2BhsXw73o86QZiCgwpKPVno06MuTtOCBBjw=w1920-h1080",
+      // ...meer LANDSCAPE-foto’s
+    ];
+
+    const stage = document.getElementById('stage');
+    const slides = SOURCES.map(src => {
+      const img = new Image();
+      img.className = 'slide';
+      img.decoding = 'async';
+      img.loading = 'eager';
+      img.src = src;
+      stage.appendChild(img);
+      return img;
+    });
+
+    let i = 0;
+    if (slides.length) slides[0].classList.add('active');
+
+    function next() {
+      const prev = slides[i];
+      i = (i + 1) % slides.length;
+      const curr = slides[i];
+      if (prev) prev.classList.remove('active');
+      if (curr) curr.classList.add('active');
+    }
+
+    // wissel elke 6 seconden
+    const INTERVAL_MS = 6000;
+    setInterval(next, INTERVAL_MS);
+  </script>
+</body>
+</html>
